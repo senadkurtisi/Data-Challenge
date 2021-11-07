@@ -99,7 +99,77 @@ def filter_goals(goal_data, df_matches):
         return False
 
 
+def process_club_stats(df_matches, df_goals, match_id_column):
+    """Extracts performance of each club from the dataset.
+    
+    Extracts number of points, goal difference and the league club is playing in.
+    """
+    match_data_grouped = df_goals.groupby(match_id_column)
+    # Extract names of all clubs
+    clubs_total = pd.unique(df_matches[["home_club", "away_club"]].values.ravel("K"))    
+    # Initialize club statistics
+    club_stats = {
+        club_name: {
+            "points": 0,
+            "goal_difference": 0,
+            "league_id": -1
+        } for club_name in clubs_total
+    }
+
+    for _, match_info in df_matches.iterrows():
+        clubs =  {
+            "home": match_info["home_club"],
+            "away": match_info["away_club"]
+        }
+        try:
+            # Get all valid goal events from this game
+            df_goals_curr = match_data_grouped.get_group(match_info["match_id"])
+
+            goal_count = df_goals_curr["scoring_club"].value_counts().to_dict()
+            # Resolve situation in which one club didn't score any goals
+            for key in ["home", "away"]:
+                if key not in goal_count:
+                    goal_count[key] = 0
+
+            # Update the number of points
+            if goal_count["home"] == goal_count["away"]:
+                club_stats[clubs["home"]]["points"] += 1
+                club_stats[clubs["away"]]["points"] += 1
+            else:
+                winning_club = max(goal_count, key=goal_count.get)
+                club_stats[clubs[winning_club]]["points"] += 3
+
+                # Update the goal difference
+                club_stats[clubs["home"]]["goal_difference"] += goal_count["home"]
+                club_stats[clubs["home"]]["goal_difference"] -= goal_count["away"]
+                club_stats[clubs["away"]]["goal_difference"] += goal_count["away"]
+                club_stats[clubs["away"]]["goal_difference"] -= goal_count["home"]
+        except:
+            # There were no valid goals in this game -> Draw
+            club_stats[clubs["home"]]["points"] += 1
+            club_stats[clubs["away"]]["points"] += 1
+        
+        if "league_id" not in club_stats[clubs["home"]]:
+            club_stats[clubs["home"]]["league_id"] = match_info["league_id"]
+        if "league_id" not in club_stats[clubs["away"]]:
+            club_stats[clubs["away"]]["league_id"] = match_info["league_id"]
+
+    return club_stats
+
+
 def clean_data(df, config):
+    """Cleans the loaded dataset.
+    
+    Discards duplicate events. Discards events with missing data.
+    Discards matches with invalid start and end time. Discards invalid goal events.
+
+    Arguments:
+        df (pandas.DataFrame): Contains loaded dataset
+        config (object): Contains configuration of the data processing pipeline
+    Returns:
+        df_matches (pandas.DataFrame): Contains necessary match related data
+        df_goals (pandas.DataFrame): Contains necessary goal related data
+    """
     event_type_col = config["event_type_column"]
     event_types = config["event_types"]
     # Required data columns for event of each type
