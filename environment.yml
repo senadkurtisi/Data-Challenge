@@ -1,0 +1,10 @@
+name: nordeus_data_challenge
+channels:
+  - anaconda
+  - defaults
+dependencies:
+  - pip
+  - python=3.9.7
+  - numpy=1.21.2
+  - pandas=1.3.4
+  - sqlite=3.36.0
