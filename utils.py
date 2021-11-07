@@ -47,6 +47,43 @@ def unflatten_event_data(df, target_columns, data_column="event_data"):
     return df_copy
 
 
+def prepare_for_join(df, renaming_rules, to_drop, join_column):
+    """Performs necessary processing of the dataferame before it can be joined."""
+    # Main column based on which the join will be performed
+    df = df.set_index(join_column)
+    # Renaming columns in order to keep them after join, if there is an overlap
+    df = df.rename(renaming_rules)
+    # Drop unnecessary columns
+    df = df.drop(columns=to_drop)
+    return df
+
+def join_match_data(df_match_start, df_match_end, join_column="match_id"):
+    """Joins start match data with end match data.
+    
+    Main usage: Filtering the matches for which start_match-end_match pairs can't be found.
+    
+    Arguments:
+        df_match_start (pandas.DataFrame): Contains match start data
+        df_match_start (pandas.DataFrame): Contains match end data
+        join_column (str): Column which is used for matching two DataFrames
+    """
+    cols_to_drop = ["event_type", "event_data"]
+    # Prepare match dataframes for join
+    start_renaming_rules = {
+        "event_timestamp": "start_time",
+        "event_id": "start_id"
+    }
+    end_renaming_rules = {
+        "event_timestamp": "end_time",
+        "event_id": "end_id"
+    }
+    df_match_start = prepare_for_join(df_match_start, start_renaming_rules, cols_to_drop, join_column)
+    df_match_end = prepare_for_join(df_match_end, end_renaming_rules, cols_to_drop, join_column)
+    # Automatically discard matches for which we can't find match_start-match_end pairs
+    df_matches = df_match_start.join(df_match_end, on=join_column, how="inner")
+    return df_matches
+
+
 def clean_data(df, config):
     event_type_col = config["event_type_column"]
     event_types = config["event_types"]
@@ -67,3 +104,5 @@ def clean_data(df, config):
     df_goals_unraveled = df_goals_unraveled.dropna()
     df_match_start_unraveled = df_match_start_unraveled.dropna()
     df_match_end_unraveled = df_match_end_unraveled.dropna()
+
+    df_matches = join_match_data(df_match_start_unraveled, df_match_end_unraveled, config["join_column"])
