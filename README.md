@@ -60,8 +60,8 @@ After cleaning, the statistics related to club performance are stored in a datab
 
 * In order to correctly retrieve the league scoreboard it was necessary to preprocess the dataset
 * Dataset cleaning steps are explained in the diagram below
-* Functions which make up the cleaning/processing part of the API are available [here](utils.py)
-* Functions for database manipulation are available [here](database_utils.py)
+* Functions which make up the cleaning/processing part of the API are available [here](utils\utils.py)
+* Functions for database manipulation are available [here](utils\database_utils.py)
 <br></br>
 <p align="center">
   <img src=".\\data_processing_pipeline.png" />
