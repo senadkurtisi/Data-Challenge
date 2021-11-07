@@ -84,6 +84,20 @@ def join_match_data(df_match_start, df_match_end, join_column="match_id"):
     return df_matches
 
 
+def filter_goals(goal_data, df_matches):
+    """Discards invalid goal events."""
+    goal_time= goal_data["event_timestamp"]
+    try:
+        match_data = df_matches[df_matches["match_id"] == goal_data["match_id"]]
+        match_start, match_end = match_data[["start_time", "end_time"]].values[0]
+        # Discard goals that happened before and after the game
+        time_check =  (goal_time >= match_start) and (goal_time <= match_end)
+        return time_check
+    except:
+        # Discard goals for which match data wasn't found
+        return False
+
+
 def clean_data(df, config):
     event_type_col = config["event_type_column"]
     event_types = config["event_types"]
@@ -110,3 +124,6 @@ def clean_data(df, config):
 
     # Discard matches with invalid start and end time
     df_matches = df_matches[df_matches["end_time"] > df_matches["start_time"]].copy()
+
+    # Discard invalid goals
+    df_goals_unraveled = df_goals_unraveled[df_goals_unraveled.apply(filter_goals, axis=1)]
