@@ -2,6 +2,8 @@
 
 This repo represents my solution to the [Data Engineering Challenge](https://drive.google.com/drive/folders/1rKXXaTugmIvzbGov-pNMiHGWxlELFENc) organized by [Nordeus](https://nordeus.com/)
 
+*You can download the dataset file __events.jsonl__ from the link above.*
+
 
 ## Table of Contents
 
