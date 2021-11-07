@@ -26,12 +26,13 @@ def main():
     # Open connection to the database
     db_conn = sqlite3.connect(config["database_name"])
 
-
+    # Load and clean data
     df_dataset = load_dataset(args.dataset_path)
     df_matches, df_goals = clean_data(df_dataset, config)
-    club_stats = process_club_stats(df_matches, df_goals, config["match_id_column"])
 
+    club_stats = process_club_stats(df_matches, df_goals, config["match_id_column"])
     save_club_stats(club_stats, db_conn)
+
     db_conn.close()
 
 
