@@ -10,7 +10,7 @@ from utils.utils import pretty_print_scoreboard
 def parse_args():
     parser = ArgumentParser(description="Retrieves scoreboard for the desired league")
     required_args = parser.add_argument_group("Required arguments")
-    required_args.add_argument("--league_id", type=int, required=True,
+    required_args.add_argument("-l", "--league_id", type=int, required=True,
                               help="Id of a league for which we want to get the scoreboard.")
     args = parser.parse_args()
     return args
@@ -31,7 +31,9 @@ def main():
     scoreboard_data, success = get_scoreboard(args.league_id, db_conn)
     if success:
         pretty_print_scoreboard(scoreboard_data)
-    
+    else:
+        print(f"There is no league with id={args.league_id}")
+
     db_conn.close()
 
 
