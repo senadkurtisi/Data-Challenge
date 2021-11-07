@@ -52,7 +52,7 @@ def prepare_for_join(df, renaming_rules, to_drop, join_column):
     # Main column based on which the join will be performed
     df = df.set_index(join_column)
     # Renaming columns in order to keep them after join, if there is an overlap
-    df = df.rename(renaming_rules)
+    df = df.rename(columns=renaming_rules)
     # Drop unnecessary columns
     df = df.drop(columns=to_drop)
     return df
@@ -171,6 +171,7 @@ def clean_data(df, config):
         df_goals (pandas.DataFrame): Contains necessary goal related data
     """
     event_type_col = config["event_type_column"]
+    # How different event types are represented in the dataset [column name]
     event_types = config["event_types"]
     # Required data columns for event of each type
     event_data = config["event_data"]
@@ -178,9 +179,9 @@ def clean_data(df, config):
     df = df.drop_duplicates(subset=config["id_column"], keep="first", inplace=False)
 
     # Extract the dataframes for separate event types
-    df_goals = df[df[event_type_col] == config[event_types["goal"]]].copy()
-    df_match_start= df[df[event_type_col] == config[event_types["match_start"]]].copy()
-    df_match_end = df[df[event_type_col] == config[event_types["match_end"]]].copy()
+    df_goals = df[df[event_type_col] == event_types["goal"]].copy()
+    df_match_start= df[df[event_type_col] == event_types["match_start"]].copy()
+    df_match_end = df[df[event_type_col] == event_types["match_end"]].copy()
 
     df_goals = unflatten_event_data(df_goals, event_data["goal"])
     df_match_start = unflatten_event_data(df_match_start, event_data["match_start"])
@@ -197,4 +198,8 @@ def clean_data(df, config):
     df_matches = df_matches[df_matches["end_time"] > df_matches["start_time"]].copy()
 
     # Discard invalid goals
-    df_goals = df_goals[df_goals.apply(filter_goals, axis=1)]
+    df_goals = df_goals[df_goals.apply(
+        lambda goal_info: filter_goals(goal_info, df_matches), axis=1
+    )]
+
+    return df_matches, df_goals
