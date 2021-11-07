@@ -80,7 +80,7 @@ def join_match_data(df_match_start, df_match_end, join_column="match_id"):
     df_match_start = prepare_for_join(df_match_start, start_renaming_rules, cols_to_drop, join_column)
     df_match_end = prepare_for_join(df_match_end, end_renaming_rules, cols_to_drop, join_column)
     # Automatically discard matches for which we can't find match_start-match_end pairs
-    df_matches = df_match_start.join(df_match_end, on=join_column, how="inner")
+    df_matches = df_match_start.join(df_match_end, on=join_column, how="inner").reset_index()
     return df_matches
 
 
@@ -105,4 +105,8 @@ def clean_data(df, config):
     df_match_start_unraveled = df_match_start_unraveled.dropna()
     df_match_end_unraveled = df_match_end_unraveled.dropna()
 
+    # Unify the match data into a single dataframe
     df_matches = join_match_data(df_match_start_unraveled, df_match_end_unraveled, config["join_column"])
+
+    # Discard matches with invalid start and end time
+    df_matches = df_matches[df_matches["end_time"] > df_matches["start_time"]].copy()
