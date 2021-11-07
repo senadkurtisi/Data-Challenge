@@ -36,7 +36,7 @@ def get_scoreboard(league_id, db_conn):
     query_get_scoreboard = """
         SELECT club_name, points, goal_difference
         FROM clubs WHERE league_id = ?
-        ORDER BY points DESC, goal_difference ASC, club_name ASC
+        ORDER BY points DESC, goal_difference DESC, club_name ASC
     """
     query_arguments = [league_id]
     cursor.execute(query_get_scoreboard, query_arguments)
