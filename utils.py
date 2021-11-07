@@ -158,6 +158,18 @@ def process_club_stats(df_matches, df_goals, match_id_column):
 
 
 def clean_data(df, config):
+    """Cleans the loaded dataset.
+    
+    Discards duplicate events. Discards events with missing data.
+    Discards matches with invalid start and end time. Discards invalid goal events.
+
+    Arguments:
+        df (pandas.DataFrame): Contains loaded dataset
+        config (object): Contains configuration of the data processing pipeline
+    Returns:
+        df_matches (pandas.DataFrame): Contains necessary match related data
+        df_goals (pandas.DataFrame): Contains necessary goal related data
+    """
     event_type_col = config["event_type_column"]
     event_types = config["event_types"]
     # Required data columns for event of each type
