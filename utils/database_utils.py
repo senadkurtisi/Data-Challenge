@@ -43,4 +43,6 @@ def get_scoreboard(league_id, db_conn):
     db_conn.commit()
 
     scoreboard_data = cursor.fetchall()
-    return scoreboard_data
+    success = len(scoreboard_data) > 0
+
+    return scoreboard_data, success

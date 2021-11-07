@@ -28,8 +28,9 @@ def main():
     db_conn = sqlite3.connect(config["database_name"])
 
     # Get and display the scoreboard
-    scoreboard_data = get_scoreboard(args.league_id, db_conn)
-    pretty_print_scoreboard(scoreboard_data)
+    scoreboard_data, success = get_scoreboard(args.league_id, db_conn)
+    if success:
+        pretty_print_scoreboard(scoreboard_data)
     
     db_conn.close()
 
