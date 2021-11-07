@@ -3,8 +3,8 @@ import json
 
 import sqlite3
 
-from utils import load_dataset, clean_data, process_club_stats
-from database_utils import save_club_stats
+from utils.utils import load_dataset, clean_data, process_club_stats
+from utils.database_utils import save_club_stats
 
 
 def parse_args():

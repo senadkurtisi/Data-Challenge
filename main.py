@@ -3,8 +3,8 @@ from argparse import ArgumentParser
 
 import sqlite3
 
-from database_utils import get_scoreboard
-from utils import pretty_print_scoreboard
+from utils.database_utils import get_scoreboard
+from utils.utils import pretty_print_scoreboard
 
 
 def parse_args():
