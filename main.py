@@ -1,16 +1,35 @@
 import json
+from argparse import ArgumentParser
 
-from utils import load_dataset, clean_data, process_club_stats
+import sqlite3
+
+from database_utils import get_scoreboard
+from utils import pretty_print_scoreboard
+
+
+def parse_args():
+    parser = ArgumentParser(description="Retrieves scoreboard for the desired league")
+    parser.add_argument("-l", "--league_id", type=int,
+                        help="Id of a league for which we want to get the scoreboard")
+    args = parser.parse_args()
+    return args
 
 
 def main():
+    args = parse_args()
+
     config_file_path = ".\\config.json"
     with open(config_file_path, "r") as cfg_file:
         config = json.load(cfg_file)
 
-    df_dataset = load_dataset(config["dataset_path"])
-    df_matches, df_goals = clean_data(df_dataset, config)
-    club_stats = process_club_stats(df_matches, df_goals, config["match_id_column"])
+    # Open connection to the database
+    db_conn = sqlite3.connect(config["database_name"])
+
+    # Get and display the scoreboard
+    scoreboard_data = get_scoreboard(args.league_id, db_conn)
+    pretty_print_scoreboard(scoreboard_data)
+    
+    db_conn.close()
 
 
 if __name__ == "__main__":

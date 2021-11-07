@@ -112,7 +112,6 @@ def process_club_stats(df_matches, df_goals, match_id_column):
         club_name: {
             "points": 0,
             "goal_difference": 0,
-            "league_id": -1
         } for club_name in clubs_total
     }
 
@@ -203,3 +202,12 @@ def clean_data(df, config):
     )]
 
     return df_matches, df_goals
+
+
+def pretty_print_scoreboard(scoreboard_data):
+    """Turns retrieved scoreboard data into a DataFrame."""
+    df_to_display = pd.DataFrame(scoreboard_data,
+                                 columns=["Club", "Points", "Goal difference"])
+    df_to_display["Rank"] = df_to_display.index + 1
+    df_to_display = df_to_display[["Rank", "Club", "Points", "Goal difference"]]
+    print(df_to_display.to_string(index=False))
