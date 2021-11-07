@@ -9,8 +9,9 @@ from utils.database_utils import save_club_stats
 
 def parse_args():
     parser = ArgumentParser(description="Loads and cleans the dataset. Saves processed data to a database.")
-    parser.add_argument("-d", "--dataset_path", type=str,
-                        help="Path where the '.jsonl' dataset file is stored.")
+    required_args = parser.add_argument_group("Required Arguments")
+    required_args.add_argument("--dataset_path", type=str, required=True,
+                               help="Path where the '.jsonl' dataset file is stored.")
     args = parser.parse_args()
     return args
 

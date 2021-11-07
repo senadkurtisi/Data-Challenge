@@ -26,24 +26,28 @@ Your work environment should be properly set up now.
 1. Navigate to the directory of this repo by using: ```cd PATH_TO_THIS_REPO```
 2. Run ```python process_data.py DATASET_PATH```. This script loads the dataset and executes data cleaning pipeline explained [here](#data-processing-pipeline).
 ```
-usage: process_data.py [-h] [-d DATASET_PATH]
+usage: process_data.py [-h] --dataset_path DATASET_PATH
 
 Loads and cleans the dataset. Saves processed data to a database.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -d DATASET_PATH, --dataset_path DATASET_PATH
+
+Required Arguments:
+  --dataset_path DATASET_PATH
                         Path where the '.jsonl' dataset file is stored.
 ```
 3. Run ```python main.py LEAGUE_ID```. This script retrieves and displays the desired league scoreboard.
 ```
-usage: main.py [-h] [-l LEAGUE_ID]
+usage: main.py [-h] --league_id LEAGUE_ID
 
 Retrieves scoreboard for the desired league
 
 optional arguments:
   -h, --help            show this help message and exit
-  -l LEAGUE_ID, --league_id LEAGUE_ID
+
+Required arguments:
+  --league_id LEAGUE_ID
                         Id of a league for which we want to get the
                         scoreboard.
 ```

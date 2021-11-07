@@ -9,8 +9,9 @@ from utils.utils import pretty_print_scoreboard
 
 def parse_args():
     parser = ArgumentParser(description="Retrieves scoreboard for the desired league")
-    parser.add_argument("-l", "--league_id", type=int,
-                        help="Id of a league for which we want to get the scoreboard.")
+    required_args = parser.add_argument_group("Required arguments")
+    required_args.add_argument("--league_id", type=int, required=True,
+                              help="Id of a league for which we want to get the scoreboard.")
     args = parser.parse_args()
     return args
 
