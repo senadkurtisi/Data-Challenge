@@ -1,0 +1,21 @@
+{
+    "dataset_path": ".\\events.jsonl",
+    "id_column": "event_id",
+
+    "event_type_column": "event_type",
+    "event_types": {
+        "match_start": "match_start",
+        "match_end": "match_end",
+        "goal": "goal"
+    },
+    "event_data": {
+        "match_start": ["match_id", "league_id", "home_club", "away_club"],
+        "match_end": ["match_id"],
+        "goal": ["match_id", "scoring_club"]
+    },
+
+    "join_column": "match_id",
+    "match_id_column": "match_id",
+
+    "database_name": "nordeus_data_challenge"
+}
