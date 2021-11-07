@@ -45,3 +45,21 @@ def unflatten_event_data(df, target_columns, data_column="event_data"):
     # Decode the data column
     df_copy[target_columns] = df[data_column].apply(lambda x: pd.Series(x))
     return df_copy
+
+
+def clean_data(df, config):
+    event_type_col = config["event_type_column"]
+    event_types = config["event_types"]
+    # Required data columns for event of each type
+    event_data = config["event_data"]
+
+    df = df.drop_duplicates(subset=config["id_column"], keep="first", inplace=False)
+
+    # Extract the dataframes for separate event types
+    df_goals = df[df[event_type_col] == config[event_types["goal"]]].copy()
+    df_match_start= df[df[event_type_col] == config[event_types["match_start"]]].copy()
+    df_match_end = df[df[event_type_col] == config[event_types["match_end"]]].copy()
+
+    df_goals_unraveled = unflatten_event_data(df_goals, event_data["goal"])
+    df_match_start_unraveled = unflatten_event_data(df_match_start, event_data["match_start"])
+    df_match_end_unraveled = unflatten_event_data(df_match_end, event_data["match_end"])
