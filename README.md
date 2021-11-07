@@ -20,7 +20,7 @@ There are two options for setting up the work-environment:
      * Activate previously created environment by executing: ``` conda activate nordeus_data_challenge```
 * Using system-wide Python
     * Open Bash/Command Prompt/Power Shell and navigate to the directory of this repo by using: ```cd PATH_TO_THIS_REPO```
-    * Run ```pip install requirements.txt```
+    * Run ```pip install -r requirements.txt```
 
 Your work environment should be properly set up now.
 
