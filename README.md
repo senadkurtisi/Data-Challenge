@@ -26,7 +26,7 @@ Your work environment should be properly set up now.
 
 ## How To Run It
 1. Navigate to the directory of this repo by using: ```cd PATH_TO_THIS_REPO```
-2. Run ```python process_data.py -d DATASET_PATH```. This script loads the dataset and executes data cleaning pipeline explained [here](#data-processing-pipeline).
+2. Run ```python process_data.py -d DATASET_PATH```. This script loads the dataset and executes data cleaning pipeline explained [here](#data-processing-pipeline). After going through the pipeline, the club performance data is saved to a database.
 ```
 usage: process_data.py [-h] -d DATASET_PATH
 
