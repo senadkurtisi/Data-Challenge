@@ -37,7 +37,7 @@ Required Arguments:
   -d DATASET_PATH, --dataset_path DATASET_PATH
                         Path where the '.jsonl' dataset file is stored.
 ```
-3. Run ```python main.py -l LEAGUE_ID```. This script retrieves and displays the desired league scoreboard.
+3. Run ```python main.py -l LEAGUE_ID```. This script retrieves and displays the desired league scoreboard if a league with such id exists. Otherwise an error message is displayed.
 ```
 usage: main.py [-h] -l LEAGUE_ID
 
