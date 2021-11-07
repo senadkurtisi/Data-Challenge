@@ -63,3 +63,7 @@ def clean_data(df, config):
     df_goals_unraveled = unflatten_event_data(df_goals, event_data["goal"])
     df_match_start_unraveled = unflatten_event_data(df_match_start, event_data["match_start"])
     df_match_end_unraveled = unflatten_event_data(df_match_end, event_data["match_end"])
+    # Discard events which don't have all of the required columns
+    df_goals_unraveled = df_goals_unraveled.dropna()
+    df_match_start_unraveled = df_match_start_unraveled.dropna()
+    df_match_end_unraveled = df_match_end_unraveled.dropna()
