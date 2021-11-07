@@ -57,6 +57,7 @@ def prepare_for_join(df, renaming_rules, to_drop, join_column):
     df = df.drop(columns=to_drop)
     return df
 
+
 def join_match_data(df_match_start, df_match_end, join_column="match_id"):
     """Joins start match data with end match data.
     
@@ -111,19 +112,19 @@ def clean_data(df, config):
     df_match_start= df[df[event_type_col] == config[event_types["match_start"]]].copy()
     df_match_end = df[df[event_type_col] == config[event_types["match_end"]]].copy()
 
-    df_goals_unraveled = unflatten_event_data(df_goals, event_data["goal"])
-    df_match_start_unraveled = unflatten_event_data(df_match_start, event_data["match_start"])
-    df_match_end_unraveled = unflatten_event_data(df_match_end, event_data["match_end"])
+    df_goals = unflatten_event_data(df_goals, event_data["goal"])
+    df_match_start = unflatten_event_data(df_match_start, event_data["match_start"])
+    df_match_end = unflatten_event_data(df_match_end, event_data["match_end"])
     # Discard events which don't have all of the required columns
-    df_goals_unraveled = df_goals_unraveled.dropna()
-    df_match_start_unraveled = df_match_start_unraveled.dropna()
-    df_match_end_unraveled = df_match_end_unraveled.dropna()
+    df_goals = df_goals.dropna()
+    df_match_start = df_match_start.dropna()
+    df_match_end = df_match_end.dropna()
 
     # Unify the match data into a single dataframe
-    df_matches = join_match_data(df_match_start_unraveled, df_match_end_unraveled, config["join_column"])
+    df_matches = join_match_data(df_match_start, df_match_end, config["join_column"])
 
     # Discard matches with invalid start and end time
     df_matches = df_matches[df_matches["end_time"] > df_matches["start_time"]].copy()
 
     # Discard invalid goals
-    df_goals_unraveled = df_goals_unraveled[df_goals_unraveled.apply(filter_goals, axis=1)]
+    df_goals = df_goals[df_goals.apply(filter_goals, axis=1)]
