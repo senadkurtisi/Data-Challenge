@@ -1,5 +1,4 @@
 {
-    "dataset_path": ".\\events.jsonl",
     "id_column": "event_id",
 
     "event_type_column": "event_type",
